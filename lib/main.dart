@@ -1,9 +1,10 @@
-import 'package:crud_flutter_dio_provider/home_page.dart';
+import 'package:crud_flutter_dio_provider/screens/home_page.dart';
 import 'package:crud_flutter_dio_provider/shared/custom_dio.dart';
-import 'package:crud_flutter_dio_provider/shared/general_api.dart';
+import 'package:crud_flutter_dio_provider/repositories/general_api.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'blocs/product_bloc.dart';
 import 'models/Cart.dart';
 import 'models/Product.dart';
 
@@ -16,9 +17,9 @@ void main(){
           Provider.value(
             value: CustomDio(),
           ),
-          ProxyProvider<CustomDio, ProductModel>(
+          ProxyProvider<CustomDio, ProductBloc>(
             // Dependency injection
-            builder: (context, api, homeModel) => ProductModel(GeneralApi(api.getClient())),
+            builder: (context, api, homeModel) => ProductBloc(GeneralApi(api.getClient())),
           ),
           ProxyProvider<CustomDio, GeneralApi>(
             // Dependency injection

@@ -2,7 +2,7 @@
 import 'package:crud_flutter_dio_provider/models/Product.dart';
 import 'package:dio/dio.dart';
 
-import 'constants.dart';
+import '../shared/constants.dart';
 
 class GeneralApi {
 
