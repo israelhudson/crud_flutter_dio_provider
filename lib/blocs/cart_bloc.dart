@@ -1,10 +1,9 @@
 import 'dart:collection';
 
-import 'package:flutter/foundation.dart';
+import 'package:crud_flutter_dio_provider/models/Product.dart';
+import 'package:flutter/cupertino.dart';
 
-import 'Product.dart';
-
-class Cart extends ChangeNotifier {
+class CartBloc extends ChangeNotifier {
   final List<Product> _products = [];
 
   UnmodifiableListView<Product> get items => UnmodifiableListView(_products);
@@ -43,30 +42,30 @@ class Cart extends ChangeNotifier {
     notifyListeners();
   }
 
-  double get getTotal{
-    double total = 0.0;
-    items.forEach((p){
-      //total += p.price * p.qtdCart;
-    });
+//  double get getTotal{
+//    double total = 0.0;
+//    items.forEach((p){
+//      total += p.price * p.qtdCart;
+//    });
+//
+//    debugPrint("HUDS "+total.toString());
+//
+//    return total;
+//  }
 
-    debugPrint("HUDS "+total.toString());
-
-    return total;
-  }
-
-  void incrementQtd(int index) {
-    //_products[index].qtdCart++;
-
-    notifyListeners();
-  }
-
-  void decrementQtd(int index) {
-
+//  void incrementQtd(int index) {
+//    _products[index].qtdCart++;
+//
+//    notifyListeners();
+//  }
+//
+//  void decrementQtd(int index) {
+//
 //    if(_products[index].qtdCart > 1)
 //      _products[index].qtdCart--;
-
-    notifyListeners();
-  }
+//
+//    notifyListeners();
+//  }
 
 
 }

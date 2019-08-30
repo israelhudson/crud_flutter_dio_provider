@@ -4,9 +4,8 @@ import 'package:crud_flutter_dio_provider/repositories/general_api.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'blocs/cart_bloc.dart';
 import 'blocs/product_bloc.dart';
-import 'models/Cart.dart';
-import 'models/Product.dart';
 
 void main(){
   Provider.debugCheckInvalidValueType = null;
@@ -26,7 +25,7 @@ void main(){
             builder: (context, api, homeModel) => GeneralApi(api.getClient()),
           ),
           ChangeNotifierProvider(
-            builder: (context) => Cart(),
+            builder: (context) => CartBloc(),
           ),
 //          ChangeNotifierProvider(
 //            builder: (context) => ProductModel(),
