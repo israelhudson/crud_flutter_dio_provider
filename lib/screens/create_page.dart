@@ -58,13 +58,22 @@ class _CreatePageState extends State<CreatePage> {
                 color: Colors.deepPurple,
                 onPressed: () {
                   if(formKey.currentState.validate()){
-                    bloc.saveProduct(Product(
+                    var result = bloc.saveProduct(Product(
                         nameProduct: "${nomeProdutoController.text}",
                         price: double.parse(precoController.text),
                         categoryId: 13,
                         thumbnail: "teste"));
-                    nomeProdutoController.text = null;
-                    precoController.text = null;
+
+                    if(result){
+                      nomeProdutoController.text = null;
+                      precoController.text = null;
+                    }else{
+                      print("ERRO AO INSERIR");
+                    }
+
+
+
+
 
                   }
 

@@ -33,7 +33,7 @@ class _HomePageState extends State<HomePage> {
             onTap: (){
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => CreatePage()),
+                MaterialPageRoute(builder: (context) => CartPage()),
               );
             },
             child: Row(
@@ -55,6 +55,7 @@ class _HomePageState extends State<HomePage> {
       ),
 
       body: Container(
+        padding: EdgeInsets.all(5),
         child: FutureBuilder(
             //future: products.api.getProducts(),
             future: products.listProducts,
@@ -67,18 +68,28 @@ class _HomePageState extends State<HomePage> {
                   itemBuilder: (context, index) {
                     Product product = snapshot.data[index];
                     return Container(
-                      child: ListTile(
-                        title: Text(product.nameProduct),
-                        trailing: FlatButton(
-                          child: Icon(Icons.add_shopping_cart),
-                          onPressed: (){
-                            cart.add(product);
-                          },
+                      child: Card(
+                        child: ListTile(
+                          title: Text("${product.nameProduct}"),
+                          subtitle: Text("R\$ ${product.price}"),
+                          trailing: FlatButton(
+                            child: Icon(Icons.add_shopping_cart),
+                            onPressed: (){
+                              cart.add(product);
+                            },
+                          ),
+                          leading: InkWell(
+                            child: Icon(Icons.delete),
+                            onTap: (){
+                              products.delete(product);
+                            },
+                          ),
                         ),
+                        color: !cart.items.contains(product)
+                            ? Theme.of(context).accentColor
+                            : Colors.green,
                       ),
-                      color: !cart.items.contains(product)
-                          ? Theme.of(context).accentColor
-                          : Colors.green,
+
                     );
                   },
                   separatorBuilder: (context, index) {

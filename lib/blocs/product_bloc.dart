@@ -25,10 +25,18 @@ class ProductBloc extends ChangeNotifier{
   }
 
   bool saveProduct(Product product){
+    int result = 0;
+    result = api.createProduct(product.toJson()) as int;
 
-    api.createProduct(product.toJson());
+    if(result == 200 || result == 201)
+      return true;
+    else
+      return false;
+  }
 
-    return false;
+  void delete(Product product){
+    api.deleteProduct(product);
+
   }
 
 

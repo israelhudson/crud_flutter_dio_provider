@@ -18,19 +18,6 @@ class GeneralApi {
     return (response.data as List).map((product)=> Product.fromJson(product)).toList();
   }
 
-  Future<List<Product>> saveProduct(Product product) async {
-    Response response = await dio.post("/product",
-        data: {
-          "id": product.nameProduct.length * 3,
-          "nameProduct": "${product.nameProduct}",
-          "price": "${product.price}",
-          "category": "Frutas",
-          "thumbnail": "teste",
-          "isSelected": "false"
-        });
-    return (response.data);
-  }
-
   Future<int> createProduct(Map<String, dynamic> data) async {
     try {
       var response = await dio.post("/product", data: data);
@@ -42,6 +29,32 @@ class GeneralApi {
       debugPrint("NS ${e.message}");
     }
   }
+
+  Future<int> deleteProduct(Product product) async {
+    try {
+      var response = await dio.delete("/product/${product.id}");
+
+      debugPrint("EXCLUIR ${response.statusCode}");
+
+      return response.statusCode;
+    } on DioError catch (e) {
+      debugPrint("EXCLUIR ${e.message}");
+    }
+  }
+
+//  Future<List<Product>> saveProduct(Product product) async {
+//    Response response = await dio.post("/product",
+//        data: {
+//          "id": product.nameProduct.length * 3,
+//          "nameProduct": "${product.nameProduct}",
+//          "price": "${product.price}",
+//          "category": "Frutas",
+//          "thumbnail": "teste",
+//          "isSelected": "false"
+//        });
+//    return (response.data);
+//  }
+
 
 //  Future<int> createPost(Map<String, dynamic> data) async {
 //    try {
