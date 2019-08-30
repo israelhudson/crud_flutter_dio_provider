@@ -14,15 +14,24 @@ class ProductBloc extends ChangeNotifier{
 
   ProductBloc(this.api);
 
-  //UnmodifiableListView<Product> get items => UnmodifiableListView(_products);
+  UnmodifiableListView<Product> get items => UnmodifiableListView(_products);
 
   //get listProducts => api.getProducts();//Retorna todos os dados da API
-  get listProducts{
+  get listProducts {
     //_products = api.getProducts() as List<Product>;
     //products.add(Product(0,"",1.0,));
 
     return api.getProducts();
   }
+
+  bool saveProduct(Product product){
+
+    api.createProduct(product.toJson());
+
+    return false;
+  }
+
+
 
 
 }

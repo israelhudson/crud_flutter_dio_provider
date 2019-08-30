@@ -7,12 +7,12 @@ class Product {
   String thumbnail;
   bool isSelected = false;
 
-  Product(
+  Product({
       this.id,
         this.nameProduct,
         this.price,
         this.categoryId,
-        this.thumbnail);
+        this.thumbnail});
 
   Product.fromJson(Map<String, dynamic> json) {
     id = json['id'];

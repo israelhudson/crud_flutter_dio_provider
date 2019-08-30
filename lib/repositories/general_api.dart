@@ -1,8 +1,7 @@
 
 import 'package:crud_flutter_dio_provider/models/Product.dart';
 import 'package:dio/dio.dart';
-
-import '../shared/constants.dart';
+import 'package:flutter/material.dart';
 
 class GeneralApi {
 
@@ -30,6 +29,18 @@ class GeneralApi {
           "isSelected": "false"
         });
     return (response.data);
+  }
+
+  Future<int> createProduct(Map<String, dynamic> data) async {
+    try {
+      var response = await dio.post("/product", data: data);
+
+      debugPrint("NS SUCESSO ${response.statusCode}");
+
+      return response.statusCode;
+    } on DioError catch (e) {
+      debugPrint("NS ${e.message}");
+    }
   }
 
 //  Future<int> createPost(Map<String, dynamic> data) async {

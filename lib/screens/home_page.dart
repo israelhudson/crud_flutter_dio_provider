@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 
 import '../blocs/product_bloc.dart';
 import '../models/Product.dart';
+import 'create_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -28,18 +29,27 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true,
         leading:
         Align(alignment: Alignment.center,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Icon(Icons.shopping_cart),
-              Container(
-                alignment: Alignment.center,
-                color: Colors.blueGrey,
-                width: 20,
-                height: 20,
-                child: Text("${cart.items.length}"),
-              )
-            ],
+          child: InkWell(
+            onTap: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CreatePage()),
+              );
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Icon(Icons.shopping_cart),
+                Container(
+                  alignment: Alignment.center,
+                  color: Colors.blueGrey,
+                  width: 20,
+                  height: 20,
+                  //child: Text("${cart.items.length}"),
+                  child: Text("${cart.items.length}"),
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -59,8 +69,8 @@ class _HomePageState extends State<HomePage> {
                     return Container(
                       child: ListTile(
                         title: Text(product.nameProduct),
-                        trailing: IconButton(
-                          icon: Icon(Icons.add_shopping_cart),
+                        trailing: FlatButton(
+                          child: Icon(Icons.add_shopping_cart),
                           onPressed: (){
                             cart.add(product);
                           },
@@ -87,7 +97,7 @@ class _HomePageState extends State<HomePage> {
         onPressed: (){
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => CartPage()),
+            MaterialPageRoute(builder: (context) => CreatePage()),
           );
         },
       ),
