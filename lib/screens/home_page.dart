@@ -1,5 +1,6 @@
 import 'dart:collection';
 
+import 'package:crud_flutter_dio_provider/repositories/general_api.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -41,7 +42,8 @@ class _HomePageState extends State<HomePage> {
 
       body: Container(
         child: FutureBuilder(
-            future: products.api.getProducts(),
+            //future: products.api.getProducts(),
+            future: products.listProducts,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
 

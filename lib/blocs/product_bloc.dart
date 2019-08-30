@@ -14,7 +14,9 @@ class ProductBloc extends ChangeNotifier{
 
   ProductBloc(this.api);
 
-  UnmodifiableListView<Product> get items => UnmodifiableListView(_products);
+  //UnmodifiableListView<Product> get items => UnmodifiableListView(_products);
+
+  get listProducts => api.getProducts();//Retorna todos os dados da API
 
   UnmodifiableListView<Product> itemsByCategory(int categoryId){
     return UnmodifiableListView(_products.where((prod)=>prod.categoryId == categoryId));
@@ -38,26 +40,22 @@ class ProductBloc extends ChangeNotifier{
     );
   }
 
-  List<Product> getProdutos(){
-    List<Product> _products;
-
-//    api.getProducts().then((p){
-//      //print(p.nameProduct);
-//      _products = p;
-//    });
-    return _products = [
-      Product(1, "Buscopan Composto Com 20 Comprimidos", 11.35, 5, "thumb"),
-      Product(2, "Miorrelax 3 Ativos 300mg+50mg+35mg Com 30 Comprimidos", 9.90, 3, "thumb"),
-      Product(3, "Ibuprofeno 50mg Gotas 30ml Genérico Medley", 8.05, 5, "thumb"),
-
-      Product(4, "Creme Facial Nivea Antissinais Vitamina E 100g", 29.99, 2, "thumb"),
-      Product(5, "Sabonete Liquido Asepxia Esfoliante Pele Mista A Oleosa 100ml", 19.99, 4, "thumb"),
-
-      Product(6, "Sabonete Liquido Dove Nutricao Profunda Refil 200ml", 4.69,1,""),
-
-
-    ];
-
-  }
+//  List<Product> getProdutos(){
+//    List<Product> _products;
+//
+//    return _products = [
+//      Product(1, "Buscopan Composto Com 20 Comprimidos", 11.35, 5, "thumb"),
+//      Product(2, "Miorrelax 3 Ativos 300mg+50mg+35mg Com 30 Comprimidos", 9.90, 3, "thumb"),
+//      Product(3, "Ibuprofeno 50mg Gotas 30ml Genérico Medley", 8.05, 5, "thumb"),
+//
+//      Product(4, "Creme Facial Nivea Antissinais Vitamina E 100g", 29.99, 2, "thumb"),
+//      Product(5, "Sabonete Liquido Asepxia Esfoliante Pele Mista A Oleosa 100ml", 19.99, 4, "thumb"),
+//
+//      Product(6, "Sabonete Liquido Dove Nutricao Profunda Refil 200ml", 4.69,1,""),
+//
+//
+//    ];
+//
+//  }
 
 }
