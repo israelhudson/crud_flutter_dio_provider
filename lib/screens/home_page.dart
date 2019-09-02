@@ -56,52 +56,55 @@ class _HomePageState extends State<HomePage> {
 
       body: Container(
         padding: EdgeInsets.all(5),
-        child: FutureBuilder(
+        child: Consumer<ProductBloc>(builder: (context, bloc, child){
+          return FutureBuilder(
             //future: products.api.getProducts(),
-            future: products.listProducts,
-            builder: (context, snapshot) {
+              future: products.listProducts,
+              builder: (context, snapshot) {
 
-              if (snapshot.connectionState == ConnectionState.done) {
+                if (snapshot.connectionState == ConnectionState.done) {
 
-                return ListView.separated(
-                  itemCount: snapshot.data.length,
-                  itemBuilder: (context, index) {
-                    Product product = snapshot.data[index];
-                    return Container(
-                      child: Card(
-                        child: ListTile(
-                          title: Text("${product.nameProduct}"),
-                          subtitle: Text("R\$ ${product.price}"),
-                          trailing: FlatButton(
-                            child: Icon(Icons.add_shopping_cart),
-                            onPressed: (){
-                              cart.add(product);
-                            },
+                  return ListView.separated(
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (context, index) {
+                      Product product = snapshot.data[index];
+                      return Container(
+                        child: Card(
+                          child: ListTile(
+                            title: Text("${product.nameProduct}"),
+                            subtitle: Text("R\$ ${product.price}"),
+                            trailing: FlatButton(
+                              child: Icon(Icons.add_shopping_cart),
+                              onPressed: (){
+                                cart.add(product);
+                              },
+                            ),
+                            leading: InkWell(
+                              child: Icon(Icons.delete),
+                              onTap: (){
+                                products.delete(product);
+                              },
+                            ),
                           ),
-                          leading: InkWell(
-                            child: Icon(Icons.delete),
-                            onTap: (){
-                              products.delete(product);
-                            },
-                          ),
+                          color: !cart.items.contains(product)
+                              ? Theme.of(context).accentColor
+                              : Colors.green,
                         ),
-                        color: !cart.items.contains(product)
-                            ? Theme.of(context).accentColor
-                            : Colors.green,
-                      ),
 
-                    );
-                  },
-                  separatorBuilder: (context, index) {
-                    return Divider();
-                  },
-                );
+                      );
+                    },
+                    separatorBuilder: (context, index) {
+                      return Divider();
+                    },
+                  );
 
-              } else {
-                return Center(child: CircularProgressIndicator(),);
+                } else {
+                  return Center(child: CircularProgressIndicator(),);
+                }
               }
-            }
-        ),
+          );
+        }
+      ),
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
