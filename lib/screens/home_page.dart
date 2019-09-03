@@ -61,33 +61,38 @@ class _HomePageState extends State<HomePage> {
         padding: EdgeInsets.all(5),
         child: Consumer<ProductBloc>(builder: (context, bloc, child){
 
-          if(lista.isEmpty)
-            bloc.api.getProducts().then((data){
-              lista = data;
-            });
+//          if(lista.isEmpty)
+//            bloc.api.getProducts().then((data) => lista = data);
+          if(bloc.items.isEmpty)
+            bloc.fetchData();
 
           return ListView.separated(
-            itemCount: lista.length,
+            //itemCount: lista.length,
+            itemCount: bloc.items.length,
             itemBuilder: (context, index) {
+
+              //Product product = lista[index];
+              Product product = bloc.items[index];
+
               return Container(
                 child: Card(
                   child: ListTile(
-                    title: Text("${lista[index].nameProduct}"),
-                    subtitle: Text("R\$ ${lista[index].price}"),
+                    title: Text("${product.nameProduct}"),
+                    subtitle: Text("R\$ ${product.price}"),
                     trailing: FlatButton(
                       child: Icon(Icons.add_shopping_cart),
                       onPressed: (){
-                        cart.add(lista[index]);
+                        cart.add(product);
                       },
                     ),
                     leading: InkWell(
                       child: Icon(Icons.delete),
                       onTap: (){
-                        products.delete(lista[index]);
+                        products.delete(product);
                       },
                     ),
                   ),
-                  color: !cart.items.contains(lista[index])
+                  color: !cart.items.contains(product)
                       ? Theme.of(context).accentColor
                       : Colors.green,
                 ),

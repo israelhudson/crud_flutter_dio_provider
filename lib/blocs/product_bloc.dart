@@ -26,11 +26,15 @@ class ProductBloc extends ChangeNotifier{
 
   Future<void> fetchData() async{
 
-    api.getProducts().then((prod){
-      for(int i = 0; i < prod.length; i++){
-        _products.add(prod[i]);
-      }
-    });
+//    api.getProducts().then((prod){
+//      for(int i = 0; i < prod.length; i++){
+//        _products.add(prod[i]);
+//      }
+//
+//      _products = prod;
+//    });
+
+    api.getProducts().then((data) => _products = data);
 
     //notifyListeners();
 
@@ -47,7 +51,10 @@ class ProductBloc extends ChangeNotifier{
   }
 
   void delete(Product product){
-    api.deleteProduct(product);
+    api.deleteProduct(product).whenComplete((){
+
+
+    });
 
     notifyListeners();
   }
