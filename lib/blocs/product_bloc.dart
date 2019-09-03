@@ -32,7 +32,7 @@ class ProductBloc extends ChangeNotifier{
       }
     });
 
-    notifyListeners();
+    //notifyListeners();
 
   }
 
@@ -49,6 +49,7 @@ class ProductBloc extends ChangeNotifier{
   void delete(Product product){
     api.deleteProduct(product);
 
+    notifyListeners();
   }
 
 
