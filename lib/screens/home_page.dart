@@ -19,9 +19,13 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
 
-    final products = Provider.of<ProductBloc>(context);
+    final blocProd = Provider.of<ProductBloc>(context);
 
     final cart = Provider.of<CartBloc>(context);
+
+    initState(){
+      blocProd.fetchData();
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -31,10 +35,11 @@ class _HomePageState extends State<HomePage> {
         Align(alignment: Alignment.center,
           child: InkWell(
             onTap: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => CartPage()),
-              );
+              blocProd.fetchData();
+//              Navigator.push(
+//                context,
+//                MaterialPageRoute(builder: (context) => CartPage()),
+//              );
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -56,55 +61,39 @@ class _HomePageState extends State<HomePage> {
 
       body: Container(
         padding: EdgeInsets.all(5),
-        child: Consumer<ProductBloc>(builder: (context, bloc, child){
-          return FutureBuilder(
-            //future: products.api.getProducts(),
-              future: products.listProducts,
-              builder: (context, snapshot) {
-
-                if (snapshot.connectionState == ConnectionState.done) {
-
-                  return ListView.separated(
-                    itemCount: snapshot.data.length,
-                    itemBuilder: (context, index) {
-                      Product product = snapshot.data[index];
-                      return Container(
-                        child: Card(
-                          child: ListTile(
-                            title: Text("${product.nameProduct}"),
-                            subtitle: Text("R\$ ${product.price}"),
-                            trailing: FlatButton(
-                              child: Icon(Icons.add_shopping_cart),
-                              onPressed: (){
-                                cart.add(product);
-                              },
-                            ),
-                            leading: InkWell(
-                              child: Icon(Icons.delete),
-                              onTap: (){
-                                products.delete(product);
-                              },
-                            ),
-                          ),
-                          color: !cart.items.contains(product)
-                              ? Theme.of(context).accentColor
-                              : Colors.green,
-                        ),
-
-                      );
+        child: ListView.separated(
+          itemCount: blocProd.items.length,
+          itemBuilder: (context, index) {
+            Product product = blocProd.items[index];
+            return Container(
+              child: Card(
+                child: ListTile(
+                  title: Text("${product.nameProduct}"),
+                  subtitle: Text("R\$ ${product.price}"),
+                  trailing: FlatButton(
+                    child: Icon(Icons.add_shopping_cart),
+                    onPressed: (){
+                      cart.add(product);
                     },
-                    separatorBuilder: (context, index) {
-                      return Divider();
+                  ),
+                  leading: InkWell(
+                    child: Icon(Icons.delete),
+                    onTap: (){
+                      blocProd.delete(product);
                     },
-                  );
+                  ),
+                ),
+                color: !cart.items.contains(product)
+                    ? Theme.of(context).accentColor
+                    : Colors.green,
+              ),
 
-                } else {
-                  return Center(child: CircularProgressIndicator(),);
-                }
-              }
-          );
-        }
-      ),
+            );
+          },
+          separatorBuilder: (context, index) {
+            return Divider();
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),

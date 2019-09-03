@@ -24,6 +24,18 @@ class ProductBloc extends ChangeNotifier{
     return api.getProducts();
   }
 
+  Future<void> fetchData() async{
+
+    api.getProducts().then((prod){
+      for(int i = 0; i < prod.length; i++){
+        _products.add(prod[i]);
+      }
+    });
+
+    notifyListeners();
+
+  }
+
   bool saveProduct(Product product){
     int result = 0;
     result = api.createProduct(product.toJson()) as int;
