@@ -16,6 +16,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  List<Product> lista = [];
+
   @override
   Widget build(BuildContext context) {
 
@@ -57,51 +60,43 @@ class _HomePageState extends State<HomePage> {
       body: Container(
         padding: EdgeInsets.all(5),
         child: Consumer<ProductBloc>(builder: (context, bloc, child){
-          return FutureBuilder(
-            //future: products.api.getProducts(),
-              future: products.listProducts,
-              builder: (context, snapshot) {
 
-                if (snapshot.connectionState == ConnectionState.done || snapshot.hasData == true) {
-                  List<Product> listProd = snapshot.data;
+          if(lista.isEmpty)
+            bloc.api.getProducts().then((data){
+              lista = data;
+            });
 
-                  return ListView.separated(
-                    itemCount: listProd.length,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        child: Card(
-                          child: ListTile(
-                            title: Text("${listProd[index].nameProduct}"),
-                            subtitle: Text("R\$ ${listProd[index].price}"),
-                            trailing: FlatButton(
-                              child: Icon(Icons.add_shopping_cart),
-                              onPressed: (){
-                                cart.add(listProd[index]);
-                              },
-                            ),
-                            leading: InkWell(
-                              child: Icon(Icons.delete),
-                              onTap: (){
-                                products.delete(listProd[index]);
-                              },
-                            ),
-                          ),
-                          color: !cart.items.contains(listProd[index])
-                              ? Theme.of(context).accentColor
-                              : Colors.green,
-                        ),
+          return ListView.separated(
+            itemCount: lista.length,
+            itemBuilder: (context, index) {
+              return Container(
+                child: Card(
+                  child: ListTile(
+                    title: Text("${lista[index].nameProduct}"),
+                    subtitle: Text("R\$ ${lista[index].price}"),
+                    trailing: FlatButton(
+                      child: Icon(Icons.add_shopping_cart),
+                      onPressed: (){
+                        cart.add(lista[index]);
+                      },
+                    ),
+                    leading: InkWell(
+                      child: Icon(Icons.delete),
+                      onTap: (){
+                        products.delete(lista[index]);
+                      },
+                    ),
+                  ),
+                  color: !cart.items.contains(lista[index])
+                      ? Theme.of(context).accentColor
+                      : Colors.green,
+                ),
 
-                      );
-                    },
-                    separatorBuilder: (context, index) {
-                      return Divider();
-                    },
-                  );
-
-                } else {
-                  return Center(child: CircularProgressIndicator(),);
-                }
-              }
+              );
+            },
+            separatorBuilder: (context, index) {
+              return Divider();
+            },
           );
         }
         ),
