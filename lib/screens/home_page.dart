@@ -66,41 +66,46 @@ class _HomePageState extends State<HomePage> {
           if(bloc.items.isEmpty)
             bloc.fetchData();
 
-          return ListView.separated(
-            //itemCount: lista.length,
-            itemCount: bloc.items.length,
-            itemBuilder: (context, index) {
+          return FutureBuilder(
+            future: bloc.listProducts,
+            builder: (context, snapshot){
+              return ListView.separated(
+                //itemCount: lista.length,
+                itemCount: bloc.items.length,
+                itemBuilder: (context, index) {
 
-              //Product product = lista[index];
-              Product product = bloc.items[index];
+                  //Product product = lista[index];
+                  Product product = bloc.items[index];
 
-              return Container(
-                child: Card(
-                  child: ListTile(
-                    title: Text("${product.nameProduct}"),
-                    subtitle: Text("R\$ ${product.price}"),
-                    trailing: FlatButton(
-                      child: Icon(Icons.add_shopping_cart),
-                      onPressed: (){
-                        cart.add(product);
-                      },
+                  return Container(
+                    child: Card(
+                      child: ListTile(
+                        title: Text("${product.nameProduct}"),
+                        subtitle: Text("R\$ ${product.price}"),
+                        trailing: FlatButton(
+                          child: Icon(Icons.add_shopping_cart),
+                          onPressed: (){
+                            cart.add(product);
+                          },
+                        ),
+                        leading: InkWell(
+                          child: Icon(Icons.delete),
+                          onTap: (){
+                            products.delete(product);
+                          },
+                        ),
+                      ),
+                      color: !cart.items.contains(product)
+                          ? Theme.of(context).accentColor
+                          : Colors.green,
                     ),
-                    leading: InkWell(
-                      child: Icon(Icons.delete),
-                      onTap: (){
-                        products.delete(product);
-                      },
-                    ),
-                  ),
-                  color: !cart.items.contains(product)
-                      ? Theme.of(context).accentColor
-                      : Colors.green,
-                ),
 
+                  );
+                },
+                separatorBuilder: (context, index) {
+                  return Divider();
+                },
               );
-            },
-            separatorBuilder: (context, index) {
-              return Divider();
             },
           );
         }
