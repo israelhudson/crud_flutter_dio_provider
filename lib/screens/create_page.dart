@@ -2,7 +2,10 @@ import 'dart:async';
 
 import 'package:crud_flutter_dio_provider/blocs/product_bloc.dart';
 import 'package:crud_flutter_dio_provider/models/Product.dart';
+import 'package:crud_flutter_dio_provider/shared/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 class CreatePage extends StatefulWidget {
@@ -48,30 +51,30 @@ class _CreatePageState extends State<CreatePage> {
               ),
               TextFormField(
                 controller: precoController,
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                     labelText: "Preço"
                 ),
                 validator: (value) => value.isEmpty ? "o preço nao pode ser vazio" : null,
               ),
               RaisedButton(
-                child: Text("Cadsatrar"),
-                color: Colors.deepPurple,
+                child: Text("Cadastrar"),
+                color: Colors.green,
                 onPressed: () {
+
                   if(formKey.currentState.validate()){
-                    var result = bloc.saveProduct(Product(
-                        nameProduct: "${nomeProdutoController.text}",
-                        price: double.parse(precoController.text),
-                        categoryId: 13,
-                        thumbnail: "teste"));
 
-                    if(result){
-                      nomeProdutoController.text = null;
-                      precoController.text = null;
-                    }else{
-                      print("ERRO AO INSERIR");
+                    try{
+                      bloc.saveProduct(Product(nameProduct: "${nomeProdutoController.text}", price: double.parse(precoController.text), categoryId: 1, thumbnail: ""));
+
+                      alert("GRAVOU");
+                      
+                      Navigator.pop(context);
+
+                    }catch(e){
+                      alert("ERROR "+e.toString());
+
                     }
-
-
 
 
 
@@ -98,4 +101,16 @@ class Controller {
     } else
       return false;
   }
+}
+
+void alert(String text){
+  Fluttertoast.showToast(
+      msg: "${text}",
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIos: 1,
+      backgroundColor: Colors.black54,
+      textColor: Colors.white,
+      fontSize: 16.0
+  );
 }
