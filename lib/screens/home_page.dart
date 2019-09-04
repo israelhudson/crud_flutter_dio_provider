@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import '../blocs/product_bloc.dart';
 import '../models/Product.dart';
 import 'create_page.dart';
+import 'package:async/async.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -19,12 +20,23 @@ class _HomePageState extends State<HomePage> {
 
   List<Product> lista = [];
 
+  final AsyncMemoizer _memoizer = AsyncMemoizer();
+
+
   @override
   Widget build(BuildContext context) {
 
     final products = Provider.of<ProductBloc>(context);
 
     final cart = Provider.of<CartBloc>(context);
+
+
+    _fetchData() {
+      return this._memoizer.runOnce(() async {
+        var data = await products.listProducts;
+        return data;
+      });
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -63,19 +75,22 @@ class _HomePageState extends State<HomePage> {
 
 //          if(lista.isEmpty)
 //            bloc.api.getProducts().then((data) => lista = data);
-          if(bloc.items.isEmpty)
-            bloc.fetchData();
+//          if(bloc.items.isEmpty)
+//            bloc.fetchData();
 
           return FutureBuilder(
-            future: bloc.listProducts,
+            //future: bloc.listProducts,
+            //future: _memoizer.runOnce(() async => bloc.listProducts),
+            future: _fetchData(),
             builder: (context, snapshot){
               return ListView.separated(
                 //itemCount: lista.length,
-                itemCount: bloc.items.length,
+                //itemCount: bloc.items.length,
+                itemCount: snapshot.data.length,
                 itemBuilder: (context, index) {
 
                   //Product product = lista[index];
-                  Product product = bloc.items[index];
+                  Product product = snapshot.data[index];
 
                   return Container(
                     child: Card(

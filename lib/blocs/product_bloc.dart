@@ -46,7 +46,8 @@ class ProductBloc extends ChangeNotifier{
 
   void delete(Product product){
     api.deleteProduct(product);
-    _products.remove(product);
+
+    listProducts();
 
 
     notifyListeners();
