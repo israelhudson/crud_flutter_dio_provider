@@ -22,6 +22,17 @@ class _HomePageState extends State<HomePage> {
 
   final AsyncMemoizer _memoizer = AsyncMemoizer();
 
+  bool refresh = false;
+
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+  new GlobalKey<RefreshIndicatorState>();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => _refreshIndicatorKey.currentState.show());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,55 +84,56 @@ class _HomePageState extends State<HomePage> {
         padding: EdgeInsets.all(5),
         child: Consumer<ProductBloc>(builder: (context, bloc, child){
 
-//          if(lista.isEmpty)
-//            bloc.api.getProducts().then((data) => lista = data);
-//          if(bloc.items.isEmpty)
-//            bloc.fetchData();
+          return RefreshIndicator(
+            key: _refreshIndicatorKey,
+            onRefresh: _fetchData,
+            child: FutureBuilder(
+              //future: bloc.listProducts,
+              //future: _memoizer.runOnce(() async => bloc.listProducts),
+              initialData: products.listProducts,
+              future: products.listProducts,
+              builder: (context, snapshot){
+                return ListView.separated(
+                  //itemCount: lista.length,
+                  //itemCount: bloc.items.length,
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (context, index) {
 
-          return FutureBuilder(
-            //future: bloc.listProducts,
-            //future: _memoizer.runOnce(() async => bloc.listProducts),
-            future: _fetchData(),
-            builder: (context, snapshot){
-              return ListView.separated(
-                //itemCount: lista.length,
-                //itemCount: bloc.items.length,
-                itemCount: snapshot.data.length,
-                itemBuilder: (context, index) {
+                    //Product product = lista[index];
+                    Product product = snapshot.data[index];
 
-                  //Product product = lista[index];
-                  Product product = snapshot.data[index];
-
-                  return Container(
-                    child: Card(
-                      child: ListTile(
-                        title: Text("${product.nameProduct}"),
-                        subtitle: Text("R\$ ${product.price}"),
-                        trailing: FlatButton(
-                          child: Icon(Icons.add_shopping_cart),
-                          onPressed: (){
-                            cart.add(product);
-                          },
+                    return Container(
+                      child: Card(
+                        child: ListTile(
+                          title: Text("${product.nameProduct}"),
+                          subtitle: Text("R\$ ${product.price}"),
+                          trailing: FlatButton(
+                            child: Icon(Icons.add_shopping_cart),
+                            onPressed: (){
+                              cart.add(product);
+                            },
+                          ),
+                          leading: InkWell(
+                            child: Icon(Icons.delete),
+                            onTap: (){
+                              products.delete(product);
+                              _refreshIndicatorKey.currentState.show();
+                            },
+                          ),
                         ),
-                        leading: InkWell(
-                          child: Icon(Icons.delete),
-                          onTap: (){
-                            products.delete(product);
-                          },
-                        ),
+                        color: !cart.items.contains(product)
+                            ? Theme.of(context).accentColor
+                            : Colors.green,
                       ),
-                      color: !cart.items.contains(product)
-                          ? Theme.of(context).accentColor
-                          : Colors.green,
-                    ),
 
-                  );
-                },
-                separatorBuilder: (context, index) {
-                  return Divider();
-                },
-              );
-            },
+                    );
+                  },
+                  separatorBuilder: (context, index) {
+                    return Divider();
+                  },
+                );
+              },
+            ),
           );
         }
         ),
