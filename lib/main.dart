@@ -16,7 +16,7 @@ void main(){
           Provider.value(
             value: CustomDio(),
           ),
-          ProxyProvider<CustomDio, ProductBloc>(
+          ChangeNotifierProxyProvider<CustomDio, ProductBloc>(
             // Dependency injection
             builder: (context, api, homeModel) => ProductBloc(GeneralApi(api.getClient())),
           ),
